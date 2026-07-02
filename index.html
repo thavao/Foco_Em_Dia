@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#111827" />
+  <title>Foco em Dia | Detector de Procrastinação</title>
+
+  <!-- Bibliotecas necessárias para usar o modelo de pose do Teachable Machine -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4/dist/tf.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8.6/dist/teachablemachine-pose.min.js"></script>
+
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+  <main class="app-shell">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Monitoramento de foco</p>
+        <h1>Foco em Dia</h1>
+        <p class="subtitle">
+          A câmera identifica seu estado. Caso você permaneça procrastinando por mais de
+          <strong>30 segundos</strong>, um alarme sonoro será acionado.
+        </p>
+      </div>
+
+      <div class="controls" aria-label="Controles">
+        <button id="startButton" class="button button-primary" type="button">
+          Iniciar câmera
+        </button>
+        <button id="stopButton" class="button button-secondary" type="button" disabled>
+          Parar
+        </button>
+      </div>
+    </section>
+
+    <section class="dashboard" aria-live="polite">
+      <article class="camera-card">
+        <div class="camera-header">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span id="cameraLabel">Câmera desligada</span>
+        </div>
+
+        <div class="camera-frame">
+          <canvas id="cameraCanvas" width="360" height="360"></canvas>
+          <div id="cameraPlaceholder" class="camera-placeholder">
+            <span class="placeholder-icon" aria-hidden="true">⌁</span>
+            <p>Inicie a câmera para começar</p>
+          </div>
+        </div>
+
+        <p class="camera-help">
+          Mantenha o tronco e a cabeça visíveis para melhorar a leitura da pose.
+        </p>
+      </article>
+
+      <aside class="status-panel">
+        <article id="statusCard" class="status-card status-idle">
+          <p class="status-label">Status atual</p>
+          <strong id="statusText">Aguardando câmera</strong>
+          <p id="statusDetail">O modelo ainda não está analisando uma pose.</p>
+        </article>
+
+        <article class="timer-card">
+          <p class="timer-label">Tempo procrastinando</p>
+          <div id="timerValue" class="timer-value">00:00</div>
+          <p class="timer-helper">O alarme dispara em 00:30.</p>
+          <div class="progress-track" aria-hidden="true">
+            <div id="timerProgress" class="progress-fill"></div>
+          </div>
+        </article>
+
+        <article class="prediction-card">
+          <div class="prediction-header">
+            <p>Confiança do modelo</p>
+            <span id="modelState">Aguardando</span>
+          </div>
+
+          <div class="prediction-row">
+            <div class="prediction-label">
+              <span>Procrastinando</span>
+              <strong id="procrastinatingConfidence">0%</strong>
+            </div>
+            <div class="confidence-track">
+              <div id="procrastinatingBar" class="confidence-fill procrastinating-fill"></div>
+            </div>
+          </div>
+
+          <div class="prediction-row">
+            <div class="prediction-label">
+              <span>Trabalhando</span>
+              <strong id="workingConfidence">0%</strong>
+            </div>
+            <div class="confidence-track">
+              <div id="workingBar" class="confidence-fill working-fill"></div>
+            </div>
+          </div>
+        </article>
+
+        <p id="message" class="message" role="status">
+          Clique em “Iniciar câmera” e autorize o uso da webcam.
+        </p>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>
